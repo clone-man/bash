@@ -1,0 +1,8 @@
+#!/bin/bash
+for x in user{1..5}
+do
+pass=`date +%s%N |md5sum | head -c 32`
+        useradd $x && echo "$pass" | passwd --stdin $x
+        echo "$x" >> user.txt
+        echo "$pass" >>pass.txt
+done
