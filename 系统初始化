@@ -27,7 +27,7 @@ firewalld_stop()
 	systemctl stop firewalld
 	systemctl disable firewalld
 	setenforce 0
-	sed -i '/^SELINX=/c SELINUX=disabled' /etc//config
+	sed -i '/^SELINUX=/c SELINUX=disabled' /etc//config
 }
 
 hostname_change()
