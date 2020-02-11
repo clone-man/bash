@@ -136,7 +136,7 @@ time_history()
 
 while :
 do
-	list()
+	list
 	read -p "请输入您的选项：" choose
 	case $choose in
 	1)
