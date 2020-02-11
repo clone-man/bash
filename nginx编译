@@ -1,0 +1,48 @@
+#!/bin/bash
+#
+#
+#
+		echo "正在获取nginx压缩包..."
+weget http://nginx.org/download/nginx-1.16.1.tar.gz
+	if [ $? -eq 0 ];then
+		echo "#######包已就位.########"
+	else
+		echo "########获取包失败！########"
+		exit
+	fi
+tar -xf nginx-1.16.1.tar.gz -C /usr/local
+		echo "######nginx已经解压到/usr/local######"
+		echo "######正在安装nginx所需环境#######"
+		echo "!!!!!!请稍后......!!!!!!"
+yum clean all &> /dev/null && yum makecache fast &> /dev/null && yum -y install apr apr-util ncurses ncurses-devel openssl-devel bison gcc gcc-c++ make &> /dev/null
+	if [ $? -eq 0 ];then
+		echo "#######环境就位######"
+	else
+		echo "#######环境失败######"
+		exit
+	fi
+		echo "######正在配置######"
+		echo "!!!!!!请稍后......!!!!!!"
+cd /usr/local/nginx-1.16.1 && ./configure --prefix=/usr/local/nginx &> /dev/null
+	if [ $? -eq 0 ];then
+		echo "#########配置成功########"
+	else
+		echo "#########配置失败请检查！！！########"
+		exit
+	fi
+		echo "########正在编译&&安装nginx#######"
+		echo "!!!!!!请稍后......!!!!!!"
+make && make install &> /dev/null	
+		if [ $? -eq 0 ];then
+			echo "#############编译&&安装成功!#########"
+		else
+			echo "############编译&&安装失败！！！请检查...############"
+			exit 
+		fi
+/usr/local/nginx/sbin/nginx
+		if [ $? -eq 0 ];then
+			echo "#############nginx启动成功！再见！################"
+			exit
+			echo "#############nginx启动失败！！！请检查############"
+			exit
+		fi
