@@ -1,0 +1,103 @@
+#!/bin/bash
+#
+#
+#
+list()
+{
+echo "###################################"
+echo "+     1.cpu使用率                 +"
+echo "+     2.mem使用率                 +"
+echo "+     3.磁盘使用率                +"
+echo "+     4.当前用户                  +"
+echo "+     5.当前IP                    +"
+echo "+     6.检查网络状况              +"
+echo "+     7.当前时间                  +"
+echo "+     8.当前用户家目录            +"
+echo "+     9.当前主机名                +"
+echo "+     q.退出                      +"
+echo "###################################"
+}
+use_cpu()
+{
+	echo `mpstat | awk 'NR==4{print $4}'`'%'
+}
+
+use_mem()
+{
+	echo `free -m | awk 'NR==2{print $3/$2}'`'%'
+}
+
+use_df()
+{
+	echo `df -Th | awk 'NR==2{print $4/$3}'`'%'
+}
+
+user_is()
+{
+	echo $USER
+}
+
+use_ip()
+{
+	echo `ip a | grep 'scope global' | awk 'NR==1{print $2}'`
+}
+
+state_ping()
+{
+	ping -c1 www.baidu.com &> /dev/null
+	if [ $? -eq 0 ];then
+		echo "network state is ok."
+	else
+		echo "network state is dead!"
+	fi
+}
+
+time_is()
+{
+	echo `date +%F`
+}
+home_is()
+{
+	echo $HOME
+}
+name_is()
+{
+	echo $HOSTNAME
+}
+while :
+do
+	list
+	read -p "请输入你的选择：" num
+	case $num in
+	1)
+		use_cpu
+	;;
+	2)
+		use_mem
+	;;
+	3)
+		use_df
+	;;
+	4)
+		user_is
+	;;
+	5)
+		use_ip
+	;;
+	6)
+		state_ping
+	;;
+	7)
+		time_is
+	;;
+	8)
+		home_is
+	;;
+	9)
+		name_is
+	;;
+	q)
+		exit
+	;;
+	esac
+done
