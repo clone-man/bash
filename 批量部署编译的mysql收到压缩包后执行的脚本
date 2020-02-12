@@ -1,0 +1,31 @@
+#!/usr/bin/env bash
+#create time:2020/02/12
+#create user:clon-man
+#file path:
+
+#收到压缩包后解压到/usr/local
+id mysql &> /dev/null
+if [ $? -eq 0 ];then
+	groupadd mysql
+	useradd -M -g mysql -s /sbin/nologin mysql
+fi
+chown -R mysql.mysql /usr/local/mysql/*
+echo "export PATH=$PATH:/usr/local/mysql/bin" >/etc/profile.d/mysql.sh
+mv /etc/{my.cnf,my.cnf.bak}
+cp /usr/local/mysql/mysql-test/include/default_my.cnf /etc/my.cnf
+cp /usr/local/mysql/support-files/mysql.server /etc/init.d/mysqld
+chkconfig --add mysqld
+chkconfig mysqld on
+ln -s /usr/local/mysql/support-files/mysql.server /usr/bin/mysqlctl
+mysqlctl start
+if [ $? -eq 0 ];then
+	ln -s /usr/local/mysql/tmp/mysql.sock /tmp/mysql.sock
+else
+	echo "启动失败！"
+	exit
+fi
+echo "source /etc/profile 可以启动运行mysql并修改密码了"
+mima=$(cat /usr/local/mysql/log/mysql_error.log | grep password | awk '{print $NF})'
+echo "初始密码为：${mima}"
+echo "注意查看/usr/local/mysql/data/auto.cnf 中的uuid"
+echo "注意查看/etc/my.cnf 中的server id"
