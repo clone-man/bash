@@ -1,0 +1,5 @@
+set from=xxx@163.com
+set smtp=smtp.163.com
+set smtp-auth-user=xxx@163.com
+set smtp-auth-password=123
+set smtp-auth=login
