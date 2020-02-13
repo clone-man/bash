@@ -1,7 +1,10 @@
-#!/bin/bash
+#!/usr/bin/env bash
 #
 #
 #
+yum clean all &> /dev/null
+yum makecache fast &> /dev/null
+yum -y install wget &> /dev/null
 		echo "正在获取Mysql源码包..."
 wget https://dev.mysql.com/get/Downloads/MySQL-5.7/mysql-boost-5.7.29.tar.gz &> /dev/null
 		if [ $? -eq 0 ];then
@@ -14,7 +17,7 @@ wget https://dev.mysql.com/get/Downloads/MySQL-5.7/mysql-boost-5.7.29.tar.gz &> 
 tar xf mysql-boost-5.7.29.tar.gz -C /usr/local &> /dev/null
 		echo "解压完成."
 		echo "安装编译安装Mysql的环境..."
-yum -y install apr apr-util ncurses ncurses-devel openssl-devel bison gcc gcc-c++ make cmake &> /dev/null && yum -y remove mariadb mariadb-server &> /dev/null
+yum -y install apr apr-util ncurses ncurses-devel openssl-devel bison gcc gcc-c++ make cmake &> /dev/null && yum -y remove mariadb* mariadb-server &> /dev/null
 		if [ $? -eq 0 ];then
 			echo "环境ok."
 		else
@@ -25,7 +28,7 @@ yum -y install apr apr-util ncurses ncurses-devel openssl-devel bison gcc gcc-c+
 useradd mysql -s /sbin/nologin -M
 		echo "用户创建成功."
 		echo "配置Mysql..."
-cd /usr/local/mysql-boost-5.7.29 && cmake . \
+cd /usr/local/mysql-5.7.29 && cmake . \
 -DWITH_BOOST=boost/boost_1_59_0/ \
 -DCMAKE_INSTALL_PREFIX=/usr/local/mysql \
 -DSYSCONFDIR=/etc \
@@ -58,22 +61,29 @@ cd /usr/local/mysql && mkdir mysql-files && chown -R mysql.mysql mysql-files
 		fi
 mysql_path="/usr/local/mysql/bin/"
 ${mysql_path}mysqld --initialize --user=mysql --basedir=/usr/local/mysql &> abc.txt && echo "正在初始化..."
-mima=`cat abc.txt | grep 'localhost' | awk '{print $NF}'`
-echo "export PATH=$PATH:/usr/local/mysql/bin" >> /etc/profile && source /etc/profile
+mima=`cat /usr/local/mysql/abc.txt | grep 'localhost' | awk '{print $NF}'`
+echo "export PATH=$PATH:/usr/local/mysql/bin" >> /etc/profile
+source /etc/profile
+echo "密码为：${mima}"
+echo "手动source /etc/profile文件"
 touch /etc/my.cnf
-echo "[mysqld]" >> /etc/my.cnf && echo "basedir=/usr/local/mysql" >> /etc/my.cnf && echo "datadir=/usr/local/mysql/data" >> /etc/my.cnf
+echo "[mysqld]" >> /etc/my.cnf
+echo "basedir=/usr/local/mysql" >> /etc/my.cnf
+echo "datadir=/usr/local/mysql/data" >> /etc/my.cnf
+echo "################################################OKOKOKOKOKOKOK##############################"
+echo "手动修改密码启动"
 #cat >> /etc/my.cnf <<e
 #[mysqld]
 #basedir=/usr/local/mysql
 #datadir=/usr/local/mysql/data
 #e
-mysqld_safe &
-mysqladmin -u root -p"${mima}" password '123'
-		if [ $? -eq 0 ];then
-			echo "Mysql启动成功,成功修改密码为123"
-		else
-			echo "密码修改失败！！！"
-			exit
-		fi
-echo "${mysql_path}mysqld_safe &" >> /etc/rc.local
-		echo "配置了开机自启"
+#mysqld_safe &
+#mysqladmin -u root -p"${mima}" password 'QianFeng@123'
+#		if [ $? -eq 0 ];then
+#			echo "Mysql启动成功,成功修改密码为QianFeng@123"
+#		else
+#			echo "密码修改失败！！！"
+#			exit
+#		fi
+#echo "${mysql_path}mysqld_safe &" >> /etc/rc.local
+#		echo "配置了开机自启"
