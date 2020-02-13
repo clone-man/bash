@@ -2,6 +2,9 @@
 #create time:
 #file path:
 
+#这是已经有了源码包
+#如果没有包  可：yum -y install wget &> /dev/null
+#wget https://dev.mysql.com/get/Downloads/MySQL-5.7/mysql-boost-5.7.29.tar.gz &> /dev/null
 
 yum -y groupinstall "Development Tools"
 yum -y install ncurses ncurses-devel bison libgcrypt perl make cmake openssl-devel
