@@ -25,3 +25,40 @@ expect:捕获 expect "password"
 send:发送  send "1\n"
 expect eof
 eof
+#############################################################################
+
+
+#!/usr/bin/env bash
+#
+#
+#
+#`which expect`
+#判断是否已有公钥；
+if [ ! -f $HOME/.ssh/id_rsa ];then
+	ssh-keygen -t rsa -b 4096 -f $HOME/.ssh/id_rsa -N ""
+fi
+#获取ip
+> hostip.txt
+netip=192.168.1.x
+for i in {2..254}
+do
+{
+	ping -c3 ${netip}.$i &> /dev/null
+	if [ $? -eq 0 ];then
+		echo ${netip}.$i >> hostip.txt
+	fi
+}&
+done
+wait
+echo "ping is over."
+#推送公钥；
+for ips in `cat hostip.txt`
+do
+	$(which expect) <<-EOF
+	spawn ssh-copy-id root@${ips}
+	expect "*yes/no*" {send "yes\n"}
+	expect "*password*" {send "1\n"}
+	expect eof
+EOF
+done
+
