@@ -2,6 +2,8 @@
 #
 #
 #
+#
+# yum -y install vim bash-completion net-tools  安装一些必要软件工具
 network_name=`ip a | grep '^2:' | awk -F": " '{print $2}'`
 network_path="/etc/sysconfig/network-scripts/"
 yum_path="/etc/yum.repos.d/"
