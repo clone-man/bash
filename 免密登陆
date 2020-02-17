@@ -39,7 +39,7 @@ if [ ! -f $HOME/.ssh/id_rsa ];then
 fi
 #获取ip
 > hostip.txt
-netip=192.168.1.x
+netip=192.168.1
 for i in {2..254}
 do
 {
