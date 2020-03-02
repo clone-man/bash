@@ -1,3 +1,6 @@
+
+vi /usr/lib/systemd/system/xxx.service
+
 [Unit]
 Description=jira
 After=network.target
