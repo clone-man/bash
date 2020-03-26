@@ -1,0 +1,10 @@
+git add *
+git commit -m "test"
+git push origin master
+git clone
+git status
+gitlab-ctl reconfigure
+gitlab-ctl restart
+gitlab-rake gitlab:backup:create  备份
+ls /var/opt/gitlab/backups
+gitlab-rake gitlab:backup:restore BACKUP=/var/opt/gitlab/backups/...   恢复备份
