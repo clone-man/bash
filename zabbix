@@ -1,0 +1,1 @@
+UserParameter=free.status[*],free | awk '/^$1/{print $$2}'
