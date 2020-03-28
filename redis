@@ -8,3 +8,13 @@ requirepass xxxx（你要设置的密码）
 在他下一行写上slaveof ip 端口号6379 如：slaveof 192.168.1.224 6379
 2）如果主机设置了密码则：查找/masterauth 回车搜索masterauth <master-password>的下一行
 masterauth  主机密码 如：masterauth xxxx
+
+
+sentinel.conf
+sentinel monitor mymaster 10.0.0.137 6379 2 #当集群中有2个sentinel认为master死了时，才能真正认为该 master已经不可用了。 (slave上面写的是master的ip，master写自己ip) 
+sentinel down-after-milliseconds mymaster 3000   #单位毫秒 
+sentinel failover-timeout mymaster 10000   #若sentinel在该配置值内未能完成failover(故障转移)操作 （即故障时master/slave自动切换），则认为本次failover失败。 
+protected-mode no  #关闭加密模式--新添加到sentinel配置文件中 
+
+
+sentinel auth-pass mymaster 123456  若有密码
