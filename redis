@@ -1,0 +1,10 @@
+安全性：设置客户端连接后进行任何其他指定前需要使用的密码
+打开配置文件redis.conf
+在requirepass foobared下一行加
+requirepass xxxx（你要设置的密码）
+./redis-cli -a xxxx
+
+1）/slaveof 回车搜索slaveof <masterip> <masterport>
+在他下一行写上slaveof ip 端口号6379 如：slaveof 192.168.1.224 6379
+2）如果主机设置了密码则：查找/masterauth 回车搜索masterauth <master-password>的下一行
+masterauth  主机密码 如：masterauth xxxx
