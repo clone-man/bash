@@ -7,3 +7,13 @@ sendmail.sh
 #export.UTF-8 
 echo "$3" | sed s/'\r'//g | mailx -s "$2" $1
 (发邮件报警  关联得用户一定要是super admin  超级管理员)
+
+默认信息：邮件的主题 
+主机: {HOST.NAME1} 
+时间: {EVENT.DATE} {EVENT.TIME} 
+级别: {TRIGGER.SEVERITY} 
+触发: {TRIGGER.NAME} 
+详情: {ITEM.NAME1}:{ITEM.KEY1}:{ITEM.VALUE1} 
+状态: {TRIGGER.STATUS} 
+项目：{TRIGGER.KEY1} 
+事件ID：{EVENT.ID}
