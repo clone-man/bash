@@ -1,1 +1,3 @@
 UserParameter=free.status[*],free | awk '/^$1/{print $$2}'
+
+https://mirrors.aliyun.com/zabbix/zabbix/4.4/rhel/7/$basearch/    (zabbix 4.4)
