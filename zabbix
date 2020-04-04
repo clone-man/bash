@@ -6,3 +6,4 @@ sendmail.sh
 #!/bin/sh
 #export.UTF-8 
 echo "$3" | sed s/'\r'//g | mailx -s "$2" $1
+(发邮件报警  关联得用户一定要是super admin  超级管理员)
