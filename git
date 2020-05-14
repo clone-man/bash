@@ -8,3 +8,6 @@ gitlab-ctl restart
 gitlab-rake gitlab:backup:create  备份
 ls /var/opt/gitlab/backups
 gitlab-rake gitlab:backup:restore BACKUP=/var/opt/gitlab/backups/...   恢复备份
+
+
+github 中搜索关键字 awesome
