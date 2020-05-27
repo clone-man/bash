@@ -4,3 +4,8 @@ set smtp-auth-user=xxx@163.com
 set smtp-auth-password=123
 set smtp-auth=login
 #vim /etc/mail.rc
+
+
+
+
+zabbix 做报警得时候 报警媒介：默认端口465  25默认不开放（smtp.aliyun.com）不用script 直接用email模板
