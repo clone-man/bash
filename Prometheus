@@ -1,0 +1,69 @@
+email:
+alertmanager.yml  (放在alertmanager的目录下（/alertmanager-data）)
+global:
+  smtp_smarthost: 'smtp.163.com:25'
+  smtp_from: '18796334080@163.com'
+  smtp_auth_username: '18796334080@163.com'
+  smtp_auth_password: 'password'
+
+route:
+  group_interval: 1m   #当第一个报警发送后，等待'group_interval'时间来发送新的一组报警信息
+  repeat_interval: 1m   # 如果一个报警信息已经发送成功了，等待'repeat_interval'时间来重新发送他们
+  receiver: 'mail-receiver'
+receivers:
+- name: 'mail-receiver'
+  email_configs:
+    - to: '18796334080@163.com'
+
+Prometheus目录下prometheus.yml修改
+# my global config
+global:
+  scrape_interval:     15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
+  # scrape_timeout is set to the global default (10s).
+
+# Alertmanager configuration
+alerting:
+  alertmanagers:
+  - static_configs:
+    - targets:
+       - 192.168.101.106:9093       (邮件报警修改)
+
+# Load rules once and periodically evaluate them according to the global 'evaluation_interval'.
+rule_files:
+  # - "first_rules.yml"
+  # - "second_rules.yml"
+   - "simulator_alert_rules.yml"    (邮件报警修改)
+
+# A scrape configuration containing exactly one endpoint to scrape:
+# Here it's Prometheus itself.
+scrape_configs:
+  # The job name is added as a label `job=<job_name>` to any timeseries scraped from this config.
+  - job_name: 'prometheus'
+
+    # metrics_path defaults to '/metrics'
+    # scheme defaults to 'http'.
+
+    static_configs:
+    - targets: ['localhost:9090']
+
+  - job_name: "docker"
+    static_configs:
+    - targets: ['192.168.101.106:8080']
+
+  - job_name: "Linux"
+    static_configs:
+    - targets: ['192.168.101.106:9100']
+
+Prometheus目录下还要放一个simulator_alert_rules.yml  (报警规则)
+groups:
+- name: simulator-alert-rule
+  rules:
+  - alert: docker-web-nginx mem is > 5M low
+    expr: sum(container_memory_usage_bytes{container_label_maintainer="NGINX Docker Maintainers <docker-maint@nginx.com>",id="/docker/324021d15f98755f16cca9736ac4321675834ca16592ef61f84d7ad5442d5906",image="nginx:latest",instance="192.168.101.106:8080",job="docker",name="web-nginx"})>5
+    for: 1m
+    labels:
+      severity: critical
+    annotations:
+      summary: "High Error Rate detected"
+      description: "Error continer is mem is > 5M!"
