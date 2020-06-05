@@ -1,5 +1,6 @@
 email:
 alertmanager.yml  (放在alertmanager的目录下（/alertmanager-data）)
+=========================================================================================================
 global:
   smtp_smarthost: 'smtp.163.com:25'
   smtp_from: '18796334080@163.com'
@@ -14,7 +15,7 @@ receivers:
 - name: 'mail-receiver'
   email_configs:
     - to: '18796334080@163.com'
-
+========================================================================================================
 Prometheus目录下prometheus.yml修改
 # my global config
 global:
