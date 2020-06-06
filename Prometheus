@@ -68,3 +68,7 @@ groups:
     annotations:
       summary: "High Error Rate detected"
       description: "Error continer is mem is > 5M!"
+
+============================
+expr:rate(container_last_seen{name="xservicesswagger_swagger_1"}[1m]) < 0.5 这行函数表示给定的容器不存在则报警
+============================
