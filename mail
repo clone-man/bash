@@ -28,6 +28,8 @@ certutil -L -d /root/.certs                         ####列出目录下证书
 cd /root/.certs/
 ll
 certutil -A -n "GeoTrust SSL CA - G3" -t "Pu,Pu,Pu" -d ./ -i 163.crt 
+成功标志：
+Notice: Trust flag u is set automatically if the private key is present.
 
 set from=18796334080@163.com
 set smtp=smtps://smtp.163.com:465
