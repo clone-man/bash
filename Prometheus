@@ -1,6 +1,20 @@
 linux dashboard_id:9276
 docker dashboard_id:193
 https://github.com/google/cadvisor
+##############################
+docker run \
+  --volume=/:/rootfs:ro \
+  --volume=/var/run:/var/run:ro \
+  --volume=/sys:/sys:ro \
+  --volume=/var/lib/docker/:/var/lib/docker:ro \
+  --volume=/dev/disk/:/dev/disk:ro \
+  --publish=8080:8080 \   端口可改
+  --detach=true \
+  --name=cadvisor \
+  --privileged \
+  --device=/dev/kmsg \
+  google/cadvisor
+###############################
 email:
 vmware中：alertmanager.yml  (放在alertmanager的目录下（/alertmanager-data）) -v x/:/alertmanager-data 
 云服务中：alertmanager.yml   docker run -itd --name alertmanager -p 9093:9093 -v x/:/etc/alertmanager/ prom/alertmanager
