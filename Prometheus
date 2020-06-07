@@ -3,12 +3,13 @@ vmware中：alertmanager.yml  (放在alertmanager的目录下（/alertmanager-da
 云服务中：alertmanager.yml   docker run -itd --name alertmanager -p 9093:9093 -v x/:/etc/alertmanager/ prom/alertmanager
 =========================================================================================================
 global:
-  smtp_smarthost: 'smtp.163.com:25'
+  smtp_smarthost: 'smtp.163.com:25'    #云服务25端口不开放得话  改为:465
   smtp_from: '18796334080@163.com'
   smtp_auth_username: '18796334080@163.com'
   smtp_auth_password: 'password'
 
 route:
+  #group_by: ['email']  #云服务加上这一条
   group_interval: 1m   #当第一个报警发送后，等待'group_interval'时间来发送新的一组报警信息
   repeat_interval: 1m   # 如果一个报警信息已经发送成功了，等待'repeat_interval'时间来重新发送他们
   receiver: 'mail-receiver'
@@ -17,7 +18,7 @@ receivers:
   email_configs:
     - to: '18796334080@163.com'
 ========================================================================================================
-Prometheus目录下prometheus.yml修改
+Prometheus目录下prometheus.yml修改     -v /x/prometheus.yml:/etc/prometheus/prometheus.yml
 # my global config
 global:
   scrape_interval:     15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
@@ -57,7 +58,7 @@ scrape_configs:
     static_configs:
     - targets: ['192.168.101.106:9100']
 
-Prometheus目录下还要放一个simulator_alert_rules.yml  (报警规则)
+Prometheus目录下还要放一个simulator_alert_rules.yml  (报警规则)   docker cp simulator_alert_rules.yml contianer:/etc/prometheus/
 groups:
 - name: simulator-alert-rule
   rules:
