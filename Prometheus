@@ -1,3 +1,6 @@
+linux dashboard_id:9276
+docker dashboard_id:193
+https://github.com/google/cadvisor
 email:
 vmware中：alertmanager.yml  (放在alertmanager的目录下（/alertmanager-data）) -v x/:/alertmanager-data 
 云服务中：alertmanager.yml   docker run -itd --name alertmanager -p 9093:9093 -v x/:/etc/alertmanager/ prom/alertmanager
