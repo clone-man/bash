@@ -1,6 +1,6 @@
 email:
-vmware中：alertmanager.yml  (放在alertmanager的目录下（/alertmanager-data）) -v x/:/alertmanager-data
-云服务中：alertmanager.yml   docker run -itd --name alertmanager -p 9093:9093 -v x/:/etc/alertmanager/
+vmware中：alertmanager.yml  (放在alertmanager的目录下（/alertmanager-data）) -v x/:/alertmanager-data 
+云服务中：alertmanager.yml   docker run -itd --name alertmanager -p 9093:9093 -v x/:/etc/alertmanager/ prom/alertmanager
 =========================================================================================================
 global:
   smtp_smarthost: 'smtp.163.com:25'
