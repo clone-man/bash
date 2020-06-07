@@ -15,15 +15,16 @@ docker run \
   --device=/dev/kmsg \
   google/cadvisor
 ###############################
-email:
+alert email:
 vmware中：alertmanager.yml  (放在alertmanager的目录下（/alertmanager-data）) -v x/:/alertmanager-data 
 云服务中：alertmanager.yml   docker run -itd --name alertmanager -p 9093:9093 -v x/:/etc/alertmanager/ prom/alertmanager
-=========================================================================================================
+===============================alertmanager.yml======================================================
 global:
   smtp_smarthost: 'smtp.163.com:25'    #云服务25端口不开放得话  改为:465
   smtp_from: '18796334080@163.com'
   smtp_auth_username: '18796334080@163.com'
   smtp_auth_password: 'password'
+  smtp_require_tls: false              #云服务加上这条
 
 route:
   #group_by: ['email']  #云服务加上这一条
@@ -75,7 +76,8 @@ scrape_configs:
     static_configs:
     - targets: ['192.168.101.106:9100']
 
-Prometheus目录下还要放一个simulator_alert_rules.yml  (报警规则)   docker cp simulator_alert_rules.yml contianer:/etc/prometheus/
+Prometheus目录下还要放一个simulator_alert_rules.yml  (报警规则/触发器)   docker cp simulator_alert_rules.yml contianer:/etc/prometheus/
+=========================simulator_alert_rules.yml=================================================
 groups:
 - name: simulator-alert-rule
   rules:
