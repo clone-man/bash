@@ -9,6 +9,16 @@ set smtp-auth=login
 
 
 zabbix 做报警得时候 报警媒介：默认端口465  25默认不开放（smtp.aliyun.com）不用script 直接用email模板
+阿里云做zabbix监控收不到邮件报警：：：如下设置：：：
+set from=18796334080@163.com
+set smtp=smtps://smtp.163.com:465
+set smtp-auth-user=18796334080@163.com
+set smtp-auth-password=123
+set smtp-auth=login
+set ssl-verify=ignore
+#set nss-config-dir=/root/.certs
+set nss-config-dir=/etc/pki/nssdb
+
 
 
 阿里云 email配置
