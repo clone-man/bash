@@ -12,3 +12,8 @@
 swapon /data/swap 
 echo “/data/swap swap swap defaults 0 0” >> /etc/fstab 
 6.再次使用cat /proc/swaps 查看swap分区是否启动 
+
+如遇到无法分配问题：
+echo 3 > /proc/sys/vm/drop_caches  其中的一种方法
+参考：
+https://www.lijiaocn.com/%E9%97%AE%E9%A2%98/2019/02/27/linux-swap-off-fail.html
