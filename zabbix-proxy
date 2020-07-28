@@ -1,0 +1,10 @@
+zabbix-proxy
+27077:20200728:160948.614 [Z3001] connection to database 'zabbix_proxy' failed: [1040] Too many connections
+27077:20200728:160948.614 Cannot connect to the database. Exiting...
+连接数过大的问题：
+可参考：https://blog.51cto.com/net881004/2089198
+
+MariaDB [(none)]> show variables like 'max_connections';
+show global status like 'Max_used_connections';  服务器响应的最大连接数
+[root@localhost zabbix]# vi /etc/my.cnf
+max_connections=10000
