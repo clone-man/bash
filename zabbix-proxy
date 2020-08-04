@@ -8,3 +8,134 @@ MariaDB [(none)]> show variables like 'max_connections';
 show global status like 'Max_used_connections';  服务器响应的最大连接数
 [root@localhost zabbix]# vi /etc/my.cnf
 max_connections=10000
+
+
+
+
+
+
+# 安装Mysql
+```yum -y install mariadb-server```
+Mysql:
+```
+mysql -u root -p
+> create database zabbix_proxy character set utf8 collate utf8_bin;
+> grant all on zabbix_proxy.* to zabbix@'localhost' identified by 'passwd';
+> flush privileges;
+> quit
+[root ]#  /usr/share/doc/zabbix-proxy-mysql*/schema.sql.gz | mysql -uzabbix -p zabbix_proxy
+```
+vim /etc/my.cnf
+```
+[mysqld]
+datadir=/data
+socket=/data/mysql.sock
+symbolic-links=0
+slow_query_log=ON
+slow_query_log_file=/var/log/mariadb/slow.log
+open_files_limit = 655350                        #
+skip-external-locking                           #跳过外部锁定
+back_log=3000                                   #暂存的连接数量
+skip-name-resolve                               #关闭mysql的dns反查功能
+memlock                                         #将mysqld 进程锁定在内存中
+thread_concurrency = 16                        #CPU核数 * 2
+max_connections=10000                            #最大连接（用户）数。每个连接MySQL的用户均算作一个连接
+max_connect_errors=30                           #最大失败连接限制
+interactive_timeout=600                         #服务器关闭交互式连接前等待活动的秒数
+wait_timeout=3600                               #服务器关闭非交互连接之前等待活动的秒数
+slow_query_log                                  #慢查询记录日志
+long_query_time = 0.1                           #慢查询记录时间  0.1秒
+key_buffer_size = 32M
+table_open_cache = 1024
+sort_buffer_size = 768K
+net_buffer_length = 8K
+read_buffer_size = 768K
+read_rnd_buffer_size = 512K
+​
+thread_cache_size = 16
+query_cache_size = 16M
+tmp_table_size = 32M
+max_connect_errors = 100
+innodb_buffer_pool_size = 512M
+innodb_flush_log_at_trx_commit = 1
+innodb_lock_wait_timeout = 50
+​
+[client]
+socket=/data/mysql.sock
+​
+[mysqld_safe]
+log-error=/var/log/mariadb/mariadb.log
+pid-file=/var/run/mariadb/mariadb.pid
+​
+!includedir /etc/my.cnf.d
+#mysql_passwd:***
+#database:
+#zabbix_proxy user:zabbix passwd:***
+```
+```systemctl start mariadb && systemctl enable mariadb```
+```ss -antpl | grep 3306```
+​
+# 安装zabbix-agent  zabbix-proxy
+我们服务器用的都是zabbix 4的版本。
+```rpm -ivh http://repo.zabbix.com/zabbix/4.0/rhel/7/x86_64/zabbix-release-4.0-1.el7.noarch.rpm```
+zabbix.repo中可能是国外的源 不好用，可以换成国内的源：
+```https://mirrors.aliyun.com/zabbix/zabbix/4.0/rhel/7/$basearch/```
+​
+vim /etc/yum.repos.d/zabbix.repo
+```
+[zabbix]
+name=Zabbix Official Repository - $basearch
+baseurl=https://mirrors.aliyun.com/zabbix/zabbix/4.0/rhel/7/$basearch/
+#baseurl=http://repo.zabbix.com/zabbix/4.0/rhel/7/$basearch/
+enabled=1
+gpgcheck=1
+gpgkey=file:///etc/pki/rpm-gpg/RPM-GPG-KEY-ZABBIX-A14FE591
+```
+```
+yum clean all && yum makecache fast
+yum -y install zabbix-agent zabbix-proxy
+```
+​
+cat /etc/zabbix/zabbix_agentd.conf
+```
+PidFile=/var/run/zabbix/zabbix_agentd.pid
+LogFile=/var/log/zabbix/zabbix_agentd.log
+LogFileSize=0
+Server=58.218.203.48
+ServerActive=58.218.203.48
+Hostname=81.68.160.6
+Include=/etc/zabbix/zabbix_agentd.d/*.conf
+Timeout=30
+HostMetadataItem=system.uname
+UnsafeUserParameters=1
+```
+​
+cat /etc/zabbix/zabbix_proxy.conf
+```
+Server=58.218.203.48
+ServerPort=10051
+Hostname=shtx-proxy
+LogFile=/var/log/zabbix/zabbix_proxy.log
+PidFile=/var/run/zabbix/zabbix_proxy.pid
+SocketDir=/var/run/zabbix
+DBSocket=/data/mysql.sock
+DBName=zabbix_proxy
+DBUser=zabbix
+DBPassword=qwe!!123!!123
+DBPort=3306
+ConfigFrequency=60
+StartPollers=250
+StartPollersUnreachable=200
+StartTrappers=100
+StartPingers=100
+StartDiscoverers=150
+SNMPTrapperFile=/var/log/snmptrap/snmptrap.log
+CacheSize=1G
+StartDBSyncers=60
+HistoryCacheSize=512M
+Timeout=30
+ExternalScripts=/usr/lib/zabbix/externalscripts
+LogSlowQueries=3000
+```
+```systemctl start zabbix-agent zabbix-proxy && systemctl enable zabbix-agent zabbix-proxy```
+```ss -antpl | grep zabbix```
