@@ -17,3 +17,18 @@ echo "$3" | sed s/'\r'//g | mailx -s "$2" $1
 状态: {TRIGGER.STATUS} 
 项目：{TRIGGER.KEY1} 
 事件ID：{EVENT.ID}
+
+将itme大多设置成主动模式
+这个进程负载监控图各个监控项对应配置文件的参数和默认值如下，当某个进程负载过高时调整相应的值：
+
+Zabbix busy trapper processes, in %                   StartTrappers=5           处理agent推过来的进程  Trappers初始子进程数
+Zabbix busy poller processes, in %                      StartPollers=5         server处理主动收集来的进程
+Zabbix busy ipmi poller processes, in %               StartIPMIPollers=0
+Zabbix busy discoverer processes, in %                StartDiscoverers=1
+Zabbix busy icmp pinger processes, in %              StartPingers=1
+Zabbix busy http poller processes, in %                StartHTTPPollers=1        HTTP主动监测的进程数
+Zabbix busy proxy poller processes, in %              StartProxyPollers=1        启动多少子进程与代理联系通信
+Zabbix busy unreachable poller processes, in %    StartPollersUnreachable=1      用于探测某些不可达主机  可使用默认,若直接agent较多，根据值调整
+Zabbix busy java poller processes, in %                 StartJavaPollers=0
+Zabbix busy snmp trapper processes, in %            StartSNMPTrapper=0
+Zabbix busy vmware collector processes, in %       StartVMwareCollectors=0
