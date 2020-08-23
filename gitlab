@@ -1,0 +1,50 @@
+docker run gitlab！！！
+my *.sh
+#
+gitlab.sh
+#!/usr/bin/env bash
+docker run \
+-itd \
+-p 8089:8089 \
+-p 8022:22 \
+--name gitlab02 \
+--restart always \
+-v /gitlab-test02/etc:/etc/gitlab \
+-v /gitlab-test02/logs:/var/log/gitlab \
+-v /gitlab-test02/data:/var/opt/gitlab \
+--privileged=true gitlab/gitlab-ce
+#
+
+# docker exec -it gitlab gitlab-ctl reconfigure && docker restart gitlab
+
+#问题参考：https://blog.csdn.net/cxy_LG/article/details/102967804
+###我的-p 8089:8089 并没有像是8089:80 因为我发现映射到80 的时候,在gitlab的页面创建/上传了文件之后并打不开,它会默认的调转到80端口,而我映射的是8089(如果你映射的是80:80将没有这个问题)
+
+【但是配置了external_url 'http://10.9.21.198:8089/'发现重启直接不能访问,原因是这句话的意思是宿主机用什么地址访问。改为8089，
+容器没有配置这个映射，我们只有80到映射。发现改为http://10.9.21.198就好使。原因不言而喻，因为有端口映射。但是仓库地址就默认是80，
+仓库地址也就不会带端口，应为默认80，意思就是,external_url的端口就是对外访问的端口,创建容器时候只要不使用80，就要配置相应的端口映射且要和external_url一致。】
+
+我的配置(做映射的需要注意的配置)：
+##http url
+external_url 'http://118.178.84.154:8089'
+gitlab_rails['time_zone'] = 'Asia/Shanghai'
+##ssh
+gitlab_rails['gitlab_ssh_host'] = '118.178.84.154'
+gitlab_rails['gitlab_shell_ssh_port'] = 8022
+
+
+    # git config --global user.email "admin@example.com"     ----设置邮箱
+    # git config --global user.name "Administrator"              ----加添用户
+    # cat /root/.gitconfig                              ---查看配置
+    # git config --global color.ui true		#语法高亮
+    # git config --list			#查看全局配置
+    [user]
+        email = admin@example.com
+        name = Administrator
+        
+        
+###一些git clone失败的问题大多是ssh key的问题
+
+
+
+
