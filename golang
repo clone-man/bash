@@ -13,7 +13,11 @@
                  [root@hange]# source /etc/profile
                  
                  
-                 
+
+golang 开发工具 goland | vscode
+            ftp://aihange.top/pub/   连接下有
+            设置goland的使用码可以搜索关注vx公众号：猿某某   获取
+
 ### https://goproxy.cn
     golang解决依赖问题：
     https://blog.csdn.net/Strlit/article/details/106730250
