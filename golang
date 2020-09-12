@@ -22,3 +22,14 @@ golang 开发工具 goland | vscode
     golang解决依赖问题：
     https://blog.csdn.net/Strlit/article/details/106730250
     https://goproxy.io/zh/docs/getting-started.html
+
+
+golang
+go get -u github.com/gin-gonic/gin    ##gin get不下来 可以换源执行下面命令之后再get：
+								1.go env -w GO111MODULE=on  2.go env -w GOPROXY=https://mirrors.aliyun.com/goproxy/,direct
+								
+								
+# go run main.go  ##run 出现的下面问题
+main.go:4:2: cannot find module providing package github.com/gin-gonic/gin: working directory is not part of a module
+这是因为少了 go.mod  和go.sum 文件 在goland的编译器中别忘了复制这俩
+也可以执行这条命令解决 go mod init sunzhongwei.com/goadmin
