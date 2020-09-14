@@ -1,0 +1,8 @@
+screen -S name  //建立name名的session
+screen -ls //查看建立的session
+screen -r id //进入该id的session
+ctrl + a + d //退出session
+screen -X -S id quit //删除该id的session
+如果是状态为dead，那么用screen -wipe id清理
+-x 　//恢复之前离线的screen作业
+-m //强制
