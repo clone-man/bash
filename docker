@@ -1,0 +1,2 @@
+df -Th 发现磁盘被docker 占用很多
+### docker system df 发现占用空间
