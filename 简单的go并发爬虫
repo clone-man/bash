@@ -29,6 +29,7 @@ func HttpGet(url string) (result []byte, err error) {
 
 func Ppage(i int)  {
 	// 要爬的目标url
+	// url 为宝马二手车demo
 	url := "https://www.che168.com/beijing/baoma/a0_0msdgscncgpi1ltocsp"+strconv.Itoa(i)+"exx0/?pvareaid=102179#currengpostion"
 	fmt.Println("正在爬的页面url：", url)
 	// 调用封装的http.Get 获取网页
