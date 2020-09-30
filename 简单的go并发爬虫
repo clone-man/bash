@@ -1,0 +1,76 @@
+package main
+
+import (
+	"fmt"
+	"io/ioutil"
+	"net/http"
+	"os"
+	"strconv"
+	"sync"
+)
+
+var wg sync.WaitGroup
+func HttpGet(url string) (result []byte, err error) {
+	// http.Get 获取网页
+	res, err := http.Get(url)
+	if err != nil {
+		fmt.Println("http get failed err = ", err)
+		return
+	}
+	defer res.Body.Close()
+	// 全部读取获取的网页
+	result, err = ioutil.ReadAll(res.Body)
+	if err != nil {
+		fmt.Println("Read All byte failed err = ", err)
+		return
+	}
+	return
+}
+
+func Ppage(i int)  {
+	// 要爬的目标url
+	url := "https://www.che168.com/beijing/baoma/a0_0msdgscncgpi1ltocsp"+strconv.Itoa(i)+"exx0/?pvareaid=102179#currengpostion"
+	fmt.Println("正在爬的页面url：", url)
+	// 调用封装的http.Get 获取网页
+	res, err := HttpGet(url)
+	if err != nil {
+		fmt.Println("HttpGet err = ", err)
+	}
+	fileName := strconv.Itoa(i) + ".html"
+	// 打开文件将获取的页面存下来
+	f, err := os.OpenFile(fileName, os.O_CREATE|os.O_WRONLY|os.O_APPEND, 0644)
+	if err != nil {
+		fmt.Println("Open File failed err = ", err)
+		return
+	}
+
+	_, err = f.Write(res)
+	if err != nil {
+		fmt.Println("Write File Failed err = ", err)
+		return
+	}
+
+	err = f.Close()
+	if err != nil {
+		fmt.Println("Close File Failed err = ", err)
+		return
+	}
+	wg.Done()
+}
+func DoWork(start, end int)  {
+	fmt.Printf("正在爬%v页-%v页\n", start, end)
+	for i := start; i <=end ; i++ {
+		wg.Add(1)
+		go Ppage(i) // 并发做爬虫页面
+	}
+}
+
+func main()  {
+	var start, end int
+	fmt.Printf("请输入想要爬的起始页：")
+	fmt.Scan(&start)
+	fmt.Printf("请输入想要爬的终止页：")
+	fmt.Scan(&end)
+	DoWork(start, end)
+	wg.Wait()
+}
