@@ -75,3 +75,62 @@ func main()  {
         }
 }
 
+
+
+
+
+
+
+
+cat xiaoguaishou.go
+package main
+import (
+        "fmt"
+)
+func main(){
+        //for i :=0;i<10;i++ {
+        //      fmt.Println(i)
+        //}
+
+        //i := 5
+        //for ;i<10;i++ {
+        //      fmt.Println(i)
+        //}
+
+        //i := 5
+        //for ;i<10; {
+        //      fmt.Println(i)
+        //      i++
+        //}
+        //s := "hello你好"
+        //for i,v := range s{
+        //      fmt.Printf("%v %c\n", i, v)
+        //}
+        //for x :=1;x<10;x++ {
+        //      for y :=1;y<=x;y++ {
+        //              fmt.Printf("%v*%v=%v\t",x,y,x*y)
+        //      }
+        //      fmt.Println()
+        //}
+        //s1 := "hello世界"
+        //for i, v := range s1{
+        //      fmt.Printf("%d %c\n",i ,v)
+        //}
+        switch n :=3;n {
+        case 1:
+                fmt.Println("大拇指")
+        case 2:
+                fmt.Println("食指")
+        case 3:
+                fmt.Println("中指")
+                goto xx
+        case 4:
+                fmt.Println("无名指")
+        case 5:
+                fmt.Println("小拇指")
+        default:
+                fmt.Println("脚趾.")
+        }
+        xx:
+                fmt.Println("小怪兽.")
+}
