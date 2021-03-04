@@ -1,0 +1,77 @@
+cat math_table.go
+package main
+
+import "fmt"
+
+func main() {
+        for x := 1; x <=9; x++ {
+                for y := 1; y <=x; y++ {
+                        fmt.Printf("%d*%d=%d\t", y, x, x*y)
+                }
+                fmt.Println()
+        }
+}
+
+
+
+
+cat math_x.go
+package main
+
+import (
+        "fmt"
+)
+
+func mathadd(x, y int) (ret int) {
+        return x + y
+
+}
+func mathjian(x, y int) (ret int) {
+        return x - y
+}
+func mathcheng(x, y int) (ret int) {
+        return x * y
+}
+func mathchu(x, y int) (ret int) {
+        return x / y
+}
+func mathqiuyu(x, y int) (ret int) {
+        return x % y
+}
+
+func main()  {
+        //math(1, 2)
+        //red := bufio.NewReader(os.Stdin)
+        //s, err := red.ReadString('\n')
+        //if err != nil {
+        //      fmt.Println(err)
+        //      return
+        //}
+        //fmt.Println(s)
+        var (
+                x, y int
+                ret string
+        )
+        fmt.Print("输入第一个数：")
+        fmt.Scanln(&x)
+        fmt.Print("输入第二个数：")
+        fmt.Scanln(&y)
+
+        fmt.Print("输入想要进行的运算：")
+        fmt.Scanln(&ret)
+        switch ret {
+        case "+":
+                fmt.Printf("值为：%v\n", mathadd(x, y))
+        case "-":
+                fmt.Printf("值为：%v\n", mathjian(x, y))
+        case "*":
+                fmt.Printf("值为：%v\n", mathcheng(x, y))
+        case "/":
+                fmt.Printf("值为：%v\n", mathchu(x, y))
+        case "%":
+                fmt.Printf("值为：%v\n", mathqiuyu(x, y))
+        default:
+                fmt.Println("滚~")
+        }
+}
+
