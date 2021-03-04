@@ -1,0 +1,12 @@
+cat nginx/Dockerfile
+FROM alpine
+#安装Nginx软件并更新到最新，
+RUN echo "https://mirror.tuna.tsinghua.edu.cn/alpine/v3.4/main" > /etc/apk/repositories \
+&& echo "https://mirror.tuna.tsinghua.edu.cn/alpine/v3.4/community" >> /etc/apk/repositories \
+&& echo "https://mirror.tuna.tsinghua.edu.cn/alpine/edge/testing" >> /etc/apk/repositories
+RUN apk add  nginx \
+    && mkdir /run/nginx
+
+#启动Nginx
+ENTRYPOINT ["nginx","-g","daemon off;"]
+#entrypoint
